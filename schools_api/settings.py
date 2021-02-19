@@ -12,6 +12,14 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 
+import environ
+
+# set casting and default value to debug
+env = environ.Env(DEBUG=(bool, False))
+
+# read the environment file
+environ.Env.read_env(env_file='.env')
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,12 +28,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '7o-*5o@^m**ga7so3$+v3onfel+rrmel-yz0p*)44#uuxm5_$b'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(' ')
 
 
 # Application definition
@@ -42,6 +50,7 @@ INSTALLED_APPS = [
     'leaflet',
     'rest_framework',
     'rest_framework_gis'
+
 ]
 
 MIDDLEWARE = [
@@ -80,8 +89,12 @@ WSGI_APPLICATION = 'schools_api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': env("POSTGRES_DB"),
+        'USER': env("POSTGRES_USER"),
+        'PASSWORD': env("POSTGRES_PASS"),
+        'HOST': env("PG_HOST"),
+        'PORT': env("PG_PORT"),
     }
 }
 
@@ -126,7 +139,7 @@ STATIC_URL = '/static/'
 
 LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (-1.94, 29.87),
-    'DEFAULT_ZOOM': 1,
+    'DEFAULT_ZOOM': 8,
     'MAX_ZOOM': 20,
     'MIN_ZOOM': 3,
     'SCALE': 'both',

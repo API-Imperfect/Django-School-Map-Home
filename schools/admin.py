@@ -5,7 +5,7 @@ from .models import School
 
 
 class SchoolAdmin(LeafletGeoAdmin):
-    pass
+    list_display = ['name', 'province', 'district', 'level', 'male', 'female']
 
 
 admin.site.register(School, SchoolAdmin)

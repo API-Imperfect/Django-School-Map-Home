@@ -26,7 +26,7 @@ class School(models.Model):
         _('School Province'), max_length=30, choices=PROVINCE_CHOICES)
     district = models.CharField(_('School District'), max_length=50)
     level = models.CharField(
-        _('School Levels'), max_length=30, choices=LEVEL_CHOICES)
+        _('School Level'), max_length=30, choices=LEVEL_CHOICES)
     male = models.IntegerField(_('Male Students'), default=0)
     female = models.IntegerField(_('Female Students'), default=0)
     electricity_availability = models.BooleanField(
