@@ -7,13 +7,13 @@ import useSWR from "swr";
 import "./App.css";
 
 export const icon = new Icon({
-   iconUrl: "/leaf-green.png",
+   iconUrl: "leaf-green.png",
    shadowUrl: "leaf-shadow.png",
    iconSize: [38, 95],
    shadowSize: [50, 64],
-   iconAnchor: [22, 94],
+   iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
    shadowAnchor: [4, 62],
-   popupAnchor: [-3, -76],
+   popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
 });
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
@@ -22,10 +22,9 @@ export default function App() {
    const [activeSchool, setActiveSchool] = useState(null);
 
    const { data, error } = useSWR("/api/v1/schools", fetcher);
-   const schools = data && !error ? data : [];
+   const schools = data && !error ? data : {};
    const position = [-1.94, 29.87];
    const zoom = 9;
-   console.log(schools);
    if (error) {
       return <Alert variant="danger">There is a problem</Alert>;
    }
@@ -64,33 +63,25 @@ export default function App() {
                icon={icon}
             >
                <Popup
+                  position={[
+                     school.geometry.coordinates[1],
+                     school.geometry.coordinates[0],
+                  ]}
                   onClose={() => {
                      setActiveSchool(null);
                   }}
                >
                   <div>
-                     <h5>{school.properties.name}</h5>
+                     <h6>{school.properties.name}</h6>
                      <p>{school.properties.province}</p>
+                     <p>{school.properties.district}</p>
+                     <p>Level: {school.properties.level}</p>
+                     <p>Male: {school.properties.male}</p>
+                     <p>Female: {school.properties.female}</p>
                   </div>
                </Popup>
             </Marker>
          ))}
-         {/* {activeSchool && (
-            <Popup
-               position={[
-                  activeSchool.geometry.coordinates[1],
-                  activeSchool.geometry.coordinates[0],
-               ]}
-               onClose={() => {
-                  setActiveSchool(null);
-               }}
-            >
-               <div>
-                  <h2>{activeSchool.properties.name}</h2>
-                  <h2>{activeSchool.properties.province}</h2>
-               </div>
-            </Popup>
-         )} */}
       </MapContainer>
    );
 }
