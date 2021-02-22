@@ -1,17 +1,16 @@
+import React from "react";
+import { MapContainer, TileLayer } from "react-leaflet";
 import "./App.css";
-import logo from "./logo.svg";
 
-function App() {
+const App = () => {
    return (
-      <div className="App">
-         <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <p>
-               Edit <code>Alpha Ogilo</code> and save to reload!
-            </p>
-         </header>
-      </div>
+      <MapContainer center={[-1.94, 29.87]} zoom={9}>
+         <TileLayer
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+         />
+      </MapContainer>
    );
-}
+};
 
 export default App;
