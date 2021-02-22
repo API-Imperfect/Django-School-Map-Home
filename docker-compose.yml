@@ -38,6 +38,19 @@ services:
       networks:
          - school-api-home
 
+   client:
+      build:
+         context: ./client
+         dockerfile: Dockerfile.dev
+      container_name: school_frontend_home
+      volumes:
+         - ./app/node_modules
+         - ./client:/app
+      depends_on:
+         - school-api
+      networks:
+         - school-api-home
+
    nginx:
       restart: always
       depends_on:
@@ -53,5 +66,6 @@ services:
 networks:
    school-api-home:
       driver: bridge
+
 volumes:
    postgres_data_home:
